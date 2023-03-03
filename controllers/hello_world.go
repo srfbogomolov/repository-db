@@ -1,14 +1,23 @@
 package controllers
 
 import (
+	"database/sql"
 	"fmt"
 	"net/http"
-
-	"github.com/srfbogomolov/repository-db/sqldb"
 )
 
-func HelloWorld(w http.ResponseWriter, r *http.Request) {
-	if err := sqldb.DB.Ping(); err != nil {
+type BaseHandler struct {
+	db *sql.DB
+}
+
+func NewBaseHandler(db *sql.DB) *BaseHandler {
+	return &BaseHandler{
+		db: db,
+	}
+}
+
+func (h *BaseHandler) HelloWorld(w http.ResponseWriter, r *http.Request) {
+	if err := h.db.Ping(); err != nil {
 		fmt.Println("DB Error")
 	}
 
