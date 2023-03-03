@@ -1,24 +1,25 @@
 package controllers
 
 import (
-	"database/sql"
 	"fmt"
 	"net/http"
+
+	"github.com/srfbogomolov/repository-db/models"
 )
 
 type BaseHandler struct {
-	db *sql.DB
+	userRepo models.UserRepository
 }
 
-func NewBaseHandler(db *sql.DB) *BaseHandler {
+func NewBaseHandler(userRepo models.UserRepository) *BaseHandler {
 	return &BaseHandler{
-		db: db,
+		userRepo: userRepo,
 	}
 }
 
 func (h *BaseHandler) HelloWorld(w http.ResponseWriter, r *http.Request) {
-	if err := h.db.Ping(); err != nil {
-		fmt.Println("DB Error")
+	if user, err := h.userRepo.FindByID(1); err != nil {
+		fmt.Println("Error", user)
 	}
 
 	w.Write([]byte("Hello, world"))

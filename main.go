@@ -5,13 +5,16 @@ import (
 	"net/http"
 
 	"github.com/srfbogomolov/repository-db/controllers"
+	"github.com/srfbogomolov/repository-db/repositories"
 	"github.com/srfbogomolov/repository-db/sqldb"
 )
 
 func main() {
 	db := sqldb.ConnectDB()
 
-	h := controllers.NewBaseHandler(db)
+	userRepo := repositories.NewUserRepo(db)
+
+	h := controllers.NewBaseHandler(userRepo)
 
 	http.HandleFunc("/", h.HelloWorld)
 
